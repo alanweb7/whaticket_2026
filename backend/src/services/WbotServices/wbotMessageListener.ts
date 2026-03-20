@@ -729,7 +729,7 @@ const downloadMedia = async (msg: proto.IWebMessageInfo, isImported: Date = null
   let buffer;
   try {
     buffer = await downloadMediaMessage(
-      msg,
+      msg as WAMessage,
       "buffer",
       {},
       {
@@ -1232,7 +1232,7 @@ ${JSON.stringify(msg?.message)}`);
 const sendDialogflowAwswer = async (
   wbot: Session,
   ticket: Ticket,
-  msg: WAMessage,
+  msg: proto.IWebMessageInfo,
   contact: Contact,
   inputAudio: string | undefined,
   companyId: number,
@@ -5256,7 +5256,9 @@ const wbotMessageListener = (wbot: Session, companyId: number): void => {
             }
           );
         } else {
-          handleMsgAck(message, 2);
+          if (message.key) {
+            handleMsgAck(message as WAMessage, 2);
+          }
         }
       }
     });
